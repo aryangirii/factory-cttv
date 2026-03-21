@@ -1,4 +1,4 @@
-const API_BASE = "http://13.126.220.97:8000";
+const API_BASE = import.meta.env.VITE_API_URL || "http://13.126.220.97:8000";
 
 const defaultHeaders: Record<string, string> = {
   "ngrok-skip-browser-warning": "true",
@@ -10,7 +10,6 @@ async function apiFetch<T>(path: string): Promise<T> {
   return res.json();
 }
 
-// Types
 export interface CameraData {
   cam_id: string;
   worker_count: number;
@@ -54,7 +53,12 @@ export interface TrendData {
   presence_hrs: number;
 }
 
-// API Functions
+export interface VideoItem {
+  key: string;
+  name: string;
+  size: number;
+}
+
 export async function fetchCameras(): Promise<CameraData[]> {
   const data = await apiFetch<{ cameras: CameraData[] }>("/cameras");
   return data.cameras;
@@ -84,12 +88,6 @@ export async function fetchTrend(days = 7): Promise<TrendData[]> {
   return data.trend;
 }
 
-export interface VideoItem {
-  key: string;
-  name: string;
-  size: number;
-}
-
 export async function fetchVideoList(camId: string): Promise<VideoItem[]> {
   const data = await apiFetch<{ videos: VideoItem[] }>(`/video-list/${camId}`);
   return data.videos;
@@ -100,7 +98,6 @@ export function getStreamUrl(camId: string, filename: string): string {
 }
 
 export function extractTimeFromFilename(filename: string): string {
-  // cam17_20260316_051806_small.mp4 → 05:18:06
   const match = filename.match(/_(\d{2})(\d{2})(\d{2})_small/);
   if (match) return `${match[1]}:${match[2]}:${match[3]}`;
   return filename;
@@ -110,13 +107,11 @@ export function formatFileSize(bytes: number): string {
   return (bytes / (1024 * 1024)).toFixed(1) + " MB";
 }
 
-// Helper to format cam_id: "cam1" → "CAM-1"
 export function formatCamId(camId: string): string {
   const num = camId.replace(/^cam/, "");
   return `CAM-${num}`;
 }
 
-// Format timestamp to time string
 export function formatTimestamp(ts: string): string {
   try {
     const d = new Date(ts);
