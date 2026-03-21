@@ -1,5 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || "http://13.126.220.97:8000";
-
+const API_BASE = import.meta.env.VITE_URL || "https://kennedy-subparietal-nongrievously.ngrok-free.dev";
 const defaultHeaders: Record<string, string> = {
   "ngrok-skip-browser-warning": "true",
 };

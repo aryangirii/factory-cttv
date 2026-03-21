@@ -8,10 +8,10 @@ import { useApiData } from "@/hooks/useApiData";
 
 const ALL_CAM_IDS = Array.from({ length: 17 }, (_, i) => `cam${i + 1}`);
 
-const API = 'https://kennedy-subparietal-nongrievously.ngrok-free.dev';
-const STREAM_API = 'http://13.126.220.97:8000';
-const H = { 'ngrok-skip-browser-warning': 'true' };
 
+const API = import.meta.env.VITE_URL || 'https://kennedy-subparietal-nongrievously.ngrok-free.dev';
+const STREAM_API = import.meta.env.VITE_URL || 'https://kennedy-subparietal-nongrievously.ngrok-free.dev';
+const H = { 'ngrok-skip-browser-warning': 'true' };
 export default function CCTVMonitor() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDate, setFilterDate] = useState("2026-03-16");
