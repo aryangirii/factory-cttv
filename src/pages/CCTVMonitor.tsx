@@ -10,7 +10,7 @@ const ALL_CAM_IDS = Array.from({ length: 17 }, (_, i) => `cam${i + 1}`);
 
 
 const API = import.meta.env.VITE_URL || 'https://kennedy-subparietal-nongrievously.ngrok-free.dev';
-const STREAM_API = import.meta.env.VITE_URL || 'https://kennedy-subparietal-nongrievously.ngrok-free.dev';
+const STREAM_API = 'https://factory-cctv-storage.s3.ap-south-1.amazonaws.com/annotated';
 const H = { 'ngrok-skip-browser-warning': 'true' };
 export default function CCTVMonitor() {
   const [searchQuery, setSearchQuery] = useState("");
