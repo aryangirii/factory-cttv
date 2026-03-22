@@ -8,10 +8,10 @@ import { useApiData } from "@/hooks/useApiData";
 
 const ALL_CAM_IDS = Array.from({ length: 17 }, (_, i) => `cam${i + 1}`);
 
-
 const API = import.meta.env.VITE_URL || 'https://kennedy-subparietal-nongrievously.ngrok-free.dev';
 const STREAM_API = 'https://factory-cctv-storage.s3.ap-south-1.amazonaws.com/annotated';
 const H = { 'ngrok-skip-browser-warning': 'true' };
+
 export default function CCTVMonitor() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDate, setFilterDate] = useState("2026-03-16");
@@ -120,7 +120,6 @@ export default function CCTVMonitor() {
     setEmergencyTimestamp(new Date().toLocaleString("en-US", { hour12: false }));
   };
 
-  // ✅ FIXED: loadVideo uses STREAM_API for video streaming
   const loadVideo = async () => {
     const camIdLower = selectedCamId.toLowerCase().replace('cam-', 'cam');
     setVideosLoading(true);
@@ -131,7 +130,8 @@ export default function CCTVMonitor() {
       if (small.length > 0) {
         setVideoList(small);
         setCurrentVideo(small[0].name);
-        const streamUrl = `${STREAM_API}/stream/${camIdLower}/${small[0].name}`;
+        // ✅ FIXED: removed extra /stream/ from S3 URL
+        const streamUrl = `${STREAM_API}/${camIdLower}/${small[0].name}`;
         if (videoRef.current) {
           videoRef.current.src = streamUrl;
           videoRef.current.load();
@@ -145,10 +145,10 @@ export default function CCTVMonitor() {
     }
   };
 
-  // ✅ FIXED: playVideo uses STREAM_API for video streaming
   const playVideo = (filename: string) => {
     const camIdLower = selectedCamId.toLowerCase().replace('cam-', 'cam');
-    const streamUrl = `${STREAM_API}/stream/${camIdLower}/${filename}`;
+    // ✅ FIXED: removed extra /stream/ from S3 URL
+    const streamUrl = `${STREAM_API}/${camIdLower}/${filename}`;
     setCurrentVideo(filename);
     if (videoRef.current) {
       videoRef.current.src = streamUrl;
